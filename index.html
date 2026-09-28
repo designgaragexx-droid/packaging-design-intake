@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="colors_and_type.css">
+  <style>
+    @font-face{font-family:"Bebas Neue";src:url("fonts/BebasNeue-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;background:#2b2b2c;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+    a{color:#fcfbf9;} a:hover{color:rgba(252,251,249,0.7);}
+    ::selection{background:#fcfbf9;color:#2b2b2c;}
+    ::placeholder{color:rgba(252,251,249,0.38);}
+    input,textarea{color-scheme:dark;}
+    input:focus,textarea:focus{outline:none;border-color:#fcfbf9 !important;}
+    button:focus-visible{outline:1px solid #fcfbf9;outline-offset:3px;}
+    @keyframes pkIn{from{opacity:0;transform:translateY(18px);filter:blur(6px);}to{opacity:1;transform:none;filter:blur(0);}}
+    @media (max-width:640px){.pk-grid{grid-template-columns:1fr !important;} .pk-grid > *{grid-column:auto !important;}}
+    @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+    @media print{.pk-noprint{display:none !important;}}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;width:100%;background:#2b2b2c;color:#fcfbf9;font-family:var(--dg-font-body);display:flex;flex-direction:column;">
+
+  <header class="pk-noprint" style="position:sticky;top:0;z-index:5;background:rgba(43,43,44,0.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:20px clamp(20px,5vw,72px) 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="assets/star-mark-white.png" alt="" style="height:14px;width:auto;"></img>
+        <span style="font:400 11px var(--dg-font-body);letter-spacing:0.24em;text-transform:uppercase;">Design Garage</span>
+      </div>
+      <span style="font:400 11px var(--dg-font-body);letter-spacing:0.24em;text-transform:uppercase;color:rgba(252,251,249,0.66);">{{ headerLabel }}</span>
+    </div>
+    <div style="height:1px;background:rgba(252,251,249,0.16);">
+      <div style="height:1px;background:#fcfbf9;width:{{ progressPercent }}%;transition:width 0.7s cubic-bezier(0.22,1,0.36,1);"></div>
+    </div>
+  </header>
+
+  <main style="flex:1;display:flex;flex-direction:column;padding:clamp(40px,7vw,88px) clamp(20px,5vw,72px) 72px;">
+    <div key="{{ stepKey }}" style="width:100%;max-width:{{ maxWidth }}px;margin:0 auto;animation:pkIn 0.8s cubic-bezier(0.22,1,0.36,1) both;">
+
+      <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:clamp(28px,4vw,44px);">
+          <div style="display:flex;justify-content:space-between;gap:16px;font:400 11px var(--dg-font-body);letter-spacing:0.24em;text-transform:uppercase;color:rgba(252,251,249,0.66);">
+            <span>Packaging Design</span>
+            <span>Project Intake</span>
+          </div>
+          <h1 style="font-family:'Bebas Neue',var(--dg-font-body);font-weight:400;font-size:clamp(76px,15vw,200px);line-height:0.86;letter-spacing:0;margin:0;">Let&rsquo;s Build Your Box</h1>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(24px,4vw,56px);align-items:end;border-top:1px solid rgba(252,251,249,0.22);padding-top:clamp(24px,3vw,36px);">
+            <p style="font-family:var(--dg-font-display);font-weight:300;font-size:clamp(24px,2.6vw,32px);line-height:1.3;margin:0;text-wrap:pretty;">Packaging that feels as good as it looks &mdash; and earns its place on the shelf.</p>
+            <div style="display:flex;flex-direction:column;gap:24px;">
+              <p style="font-size:16px;line-height:1.7;color:rgba(252,251,249,0.72);margin:0;text-wrap:pretty;">This short brief gathers everything we need to understand your product, your formats, and your vision &mdash; so we can scope your project accurately and begin with intention. It takes about eight minutes. Have your product details, dielines, and any brand assets handy.</p>
+              <div style="display:flex;">
+                <button type="button" onClick="{{ goNext }}" style="background:transparent;color:#fcfbf9;border:1px solid #fcfbf9;border-radius:999px;padding:16px 36px;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:background 0.35s ease,color 0.35s ease;" style-hover="background:#fcfbf9;color:#2b2b2c;">Begin the Brief &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font:italic 600 13px var(--dg-font-body);letter-spacing:0.08em;text-transform:uppercase;color:rgba(252,251,249,0.66);margin-bottom:14px;">{{ current.eyebrow }}</div>
+          <h1 style="font-family:'Bebas Neue',var(--dg-font-body);font-weight:400;font-size:clamp(52px,8vw,96px);line-height:0.88;margin:0 0 18px;">{{ current.title }}</h1>
+          <p style="font-size:16px;line-height:1.7;color:rgba(252,251,249,0.72);max-width:580px;margin:0 0 44px;text-wrap:pretty;">{{ current.intro }}</p>
+
+          <div class="pk-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 24px;">
+            <sc-for list="{{ fields }}" as="f" hint-placeholder-count="4">
+              <div style="grid-column:{{ f.gridColumn }};display:flex;flex-direction:column;gap:12px;min-width:0;">
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <label style="font:400 11px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;">{{ f.labelText }}</label>
+                  <sc-if value="{{ f.hasSub }}" hint-placeholder-val="{{ false }}">
+                    <p style="font-size:14px;line-height:1.55;color:rgba(252,251,249,0.66);margin:0;max-width:560px;">{{ f.sub }}</p>
+                  </sc-if>
+                </div>
+
+                <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}">
+                  <input type="{{ f.inputType }}" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" aria-label="{{ f.label }}" style="width:100%;padding:15px 18px;font:16px var(--dg-font-body);color:#fcfbf9;background:rgba(252,251,249,0.04);border:1px solid {{ f.border }};border-radius:15px;transition:border-color 0.3s ease;"></input>
+                </sc-if>
+
+                <sc-if value="{{ f.isTextarea }}" hint-placeholder-val="{{ false }}">
+                  <textarea value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" rows="4" aria-label="{{ f.label }}" style="width:100%;padding:16px 18px;font:16px/1.6 var(--dg-font-body);color:#fcfbf9;background:rgba(252,251,249,0.04);border:1px solid {{ f.border }};border-radius:15px;resize:vertical;transition:border-color 0.3s ease;"></textarea>
+                </sc-if>
+
+                <sc-if value="{{ f.isChips }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                    <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="4">
+                      <button type="button" onClick="{{ o.onClick }}" aria-pressed="{{ o.selected }}" style="display:flex;align-items:center;gap:8px;background:{{ o.bg }};color:{{ o.fg }};border:1px solid {{ o.border }};border-radius:999px;padding:11px 20px;font:400 14px var(--dg-font-body);cursor:pointer;transition:background 0.3s ease,color 0.3s ease,border-color 0.3s ease;" style-hover="border-color:#fcfbf9;">{{ o.display }}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ f.isList }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3">
+                      <button type="button" onClick="{{ o.onClick }}" aria-pressed="{{ o.selected }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:{{ o.rowBg }};color:#fcfbf9;border:1px solid {{ o.border }};border-radius:15px;padding:16px 18px;font:400 15px var(--dg-font-body);cursor:pointer;transition:background 0.3s ease,border-color 0.3s ease;" style-hover="border-color:#fcfbf9;">
+                        <span style="flex:none;width:18px;height:18px;border-radius:50%;border:1px solid #fcfbf9;display:flex;align-items:center;justify-content:center;">
+                          <span style="width:8px;height:8px;border-radius:50%;background:#fcfbf9;opacity:{{ o.dotOpacity }};transform:scale({{ o.dotScale }});transition:all 0.3s cubic-bezier(0.22,1,0.36,1);"></span>
+                        </span>
+                        <span>{{ o.label }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ f.isFile }}" hint-placeholder-val="{{ false }}">
+                  <label style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:32px 20px;border:1px dashed rgba(252,251,249,0.34);border-radius:15px;cursor:pointer;text-align:center;transition:border-color 0.3s ease,background 0.3s ease;" style-hover="border-color:#fcfbf9;background:rgba(252,251,249,0.04);">
+                    <span style="font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;">+ Add Files</span>
+                    <span style="font-size:13px;color:rgba(252,251,249,0.6);">PDF, PNG, JPG, SVG, AI, ZIP</span>
+                    <input type="file" multiple="{{ true }}" accept=".pdf,.png,.jpg,.jpeg,.svg,.ai,.eps,.zip" onChange="{{ handleFiles }}" style="position:absolute;opacity:0;width:1px;height:1px;"></input>
+                  </label>
+                  <sc-if value="{{ hasFiles }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                      <sc-for list="{{ files }}" as="file" hint-placeholder-count="2">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border:1px solid rgba(252,251,249,0.16);border-radius:15px;font-size:14px;">
+                          <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;">{{ file.name }}</span>
+                          <button type="button" onClick="{{ file.remove }}" aria-label="Remove file" style="background:none;border:none;cursor:pointer;color:rgba(252,251,249,0.66);font-size:18px;line-height:1;">&times;</button>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </sc-if>
+
+                <sc-if value="{{ f.hasError }}" hint-placeholder-val="{{ false }}">
+                  <p style="font-size:13.5px;color:#f08a63;margin:0;">{{ f.errorText }}</p>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ hasErrors }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:14px;color:#f08a63;margin:32px 0 0;">A few answers are still needed above.</p>
+          </sc-if>
+
+          <div class="pk-noprint" style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:56px;padding-top:28px;border-top:1px solid rgba(252,251,249,0.16);">
+            <button type="button" onClick="{{ goBack }}" style="background:none;border:none;color:rgba(252,251,249,0.72);padding:12px 0;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:color 0.3s ease;" style-hover="color:#fcfbf9;">&larr; Back</button>
+            <button type="button" onClick="{{ goNext }}" style="background:transparent;color:#fcfbf9;border:1px solid #fcfbf9;border-radius:999px;padding:16px 36px;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:background 0.35s ease,color 0.35s ease;" style-hover="background:#fcfbf9;color:#2b2b2c;">{{ nextLabel }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font:italic 600 13px var(--dg-font-body);letter-spacing:0.08em;text-transform:uppercase;color:rgba(252,251,249,0.66);margin-bottom:14px;">Almost There</div>
+          <h1 style="font-family:'Bebas Neue',var(--dg-font-body);font-weight:400;font-size:clamp(52px,8vw,96px);line-height:0.88;margin:0 0 18px;">Review Your Brief</h1>
+          <p style="font-size:16px;line-height:1.7;color:rgba(252,251,249,0.72);max-width:580px;margin:0 0 40px;">Take a moment to look everything over. You can edit any section before sending it our way.</p>
+
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <sc-for list="{{ reviewSections }}" as="sec" hint-placeholder-count="5">
+              <div style="border:1px solid rgba(252,251,249,0.22);border-radius:15px;padding:clamp(20px,3vw,32px);">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;">
+                  <div style="font:italic 600 14px var(--dg-font-body);letter-spacing:0.06em;text-transform:uppercase;">{{ sec.title }}</div>
+                  <button type="button" class="pk-noprint" onClick="{{ sec.edit }}" style="background:transparent;color:#fcfbf9;border:1px solid rgba(252,251,249,0.34);border-radius:999px;padding:8px 18px;font:400 11px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;transition:all 0.3s ease;" style-hover="background:#fcfbf9;color:#2b2b2c;border-color:#fcfbf9;">Edit</button>
+                </div>
+                <div style="display:flex;flex-direction:column;">
+                  <sc-for list="{{ sec.rows }}" as="r" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px 24px;padding:12px 0;border-top:1px solid rgba(252,251,249,0.1);">
+                      <div style="font:400 11px var(--dg-font-body);letter-spacing:0.18em;text-transform:uppercase;color:rgba(252,251,249,0.62);padding-top:3px;">{{ r.label }}</div>
+                      <div style="font-size:15px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;">{{ r.value }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ submitError }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:14.5px;color:#f08a63;margin:24px 0 0;">Your brief wasn&rsquo;t sent. Please try again &mdash; none of your answers have been lost.</p>
+          </sc-if>
+
+          <div class="pk-noprint" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:48px;padding-top:28px;border-top:1px solid rgba(252,251,249,0.16);">
+            <div style="display:flex;gap:28px;">
+              <button type="button" onClick="{{ goBack }}" style="background:none;border:none;color:rgba(252,251,249,0.72);padding:12px 0;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;" style-hover="color:#fcfbf9;">&larr; Back</button>
+              <button type="button" onClick="{{ printPage }}" style="background:none;border:none;color:rgba(252,251,249,0.72);padding:12px 0;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:4px;" style-hover="color:#fcfbf9;">Print</button>
+            </div>
+            <button type="button" onClick="{{ submit }}" disabled="{{ isSubmitting }}" style="background:transparent;color:#fcfbf9;border:1px solid #fcfbf9;border-radius:999px;padding:16px 40px;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;min-width:230px;opacity:{{ submitOpacity }};transition:background 0.35s ease,color 0.35s ease;" style-hover="background:#fcfbf9;color:#2b2b2c;">{{ submitLabel }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isThanks }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px;padding-top:clamp(8px,4vw,40px);">
+          <img src="assets/star-mark-white.png" alt="" style="height:28px;width:auto;"></img>
+          <h1 style="font-family:'Bebas Neue',var(--dg-font-body);font-weight:400;font-size:clamp(80px,14vw,180px);line-height:0.86;margin:0;">Thank You</h1>
+          <div style="display:flex;flex-direction:column;gap:16px;max-width:540px;font-size:17px;line-height:1.7;color:rgba(252,251,249,0.78);">
+            <p style="margin:0;">We&rsquo;ve received your packaging brief.</p>
+            <p style="margin:0;">We&rsquo;ll review your product, formats, and timeline, then follow up with next steps and a tailored proposal. Your project dates are reserved once your agreement is signed and deposit is paid.</p>
+            <p style="margin:0;font-family:var(--dg-font-display);font-weight:300;font-size:24px;line-height:1.4;color:#fcfbf9;">We can&rsquo;t wait to see it on the shelf.</p>
+          </div>
+          <a href="https://design-garage-xx.com/" style="background:transparent;color:#fcfbf9;border:1px solid #fcfbf9;border-radius:999px;padding:16px 36px;font:400 12px var(--dg-font-body);letter-spacing:0.2em;text-transform:uppercase;text-decoration:none;transition:background 0.35s ease,color 0.35s ease;" style-hover="background:#fcfbf9;color:#2b2b2c;">Return to Design Garage</a>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showBudget&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}, &quot;endpoint&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;/api/packaging&quot;, &quot;tsType&quot;: &quot;string&quot;}}">
+// =====================================================================
+// PK_CONFIG — edit all intake copy, questions, and options here.
+// Field types: text | email | textarea | date | single | multi | file
+// layout: "chips" (pill buttons) or "list" (stacked rows) for single/multi
+// full: true spans both columns. required: true blocks Continue.
+// Submissions POST to /api/packaging (see api/packaging.js).
+// =====================================================================
+const PK_CONFIG = {
+  endpoint: "/api/packaging",
+  steps: [
+    {
+      id: "about", eyebrow: "01 — About You", title: "Let’s Start With You",
+      intro: "A few basics so we know who we’re designing for and where to send your proposal.",
+      fields: [
+        { id: "contactName", type: "text", label: "Your name", required: true, placeholder: "Jane Doe" },
+        { id: "contactEmail", type: "email", label: "Email", required: true, placeholder: "you@brand.com" },
+        { id: "businessName", type: "text", label: "Brand name", required: true, placeholder: "Your brand" },
+        { id: "website", type: "text", label: "Website or Instagram", placeholder: "@yourbrand" },
+        { id: "branding", type: "single", layout: "list", full: true, required: true, label: "Do you have established branding?", sub: "Logo, colors, and fonts — the foundation your packaging builds on.",
+          options: ["Yes, my branding is complete", "I have branding, but it may need updates", "No, I need branding too", "I’m not sure"] }
+      ]
+    },
+    {
+      id: "product", eyebrow: "02 — The Product", title: "Tell Us About Your Product",
+      intro: "Help us understand what’s going inside the package — and who it’s for.",
+      fields: [
+        { id: "productName", type: "text", label: "Product or line name", required: true, placeholder: "e.g. Golden Hour Body Oil" },
+        { id: "retailPrice", type: "text", label: "Expected retail price", placeholder: "e.g. $38" },
+        { id: "category", type: "single", layout: "chips", full: true, required: true, label: "Category",
+          options: ["Food & beverage", "Beauty & skincare", "Wellness & supplements", "Candles & home", "Apparel & accessories", "Pet", "Other"] },
+        { id: "description", type: "textarea", full: true, required: true, label: "Describe your product", sub: "What is it, and what makes it different?", placeholder: "Tell us the story…" },
+        { id: "audience", type: "textarea", full: true, label: "Who is your ideal customer?", placeholder: "Age, lifestyle, what they value…" },
+        { id: "channels", type: "multi", layout: "chips", full: true, label: "Where will it be sold?",
+          options: ["Retail stores", "Your website", "Amazon / marketplaces", "Wholesale", "Markets & pop-ups", "Subscription boxes"] }
+      ]
+    },
+    {
+      id: "packaging", eyebrow: "03 — The Packaging", title: "What Are We Designing?",
+      intro: "Select every piece you’ll need. If you’re unsure, that’s perfectly fine — we’ll guide you.",
+      fields: [
+        { id: "formats", type: "multi", layout: "chips", full: true, required: true, label: "Packaging formats",
+          options: ["Box or carton", "Product label", "Bag or pouch", "Bottle or jar", "Tube", "Tin or can", "Mailer box", "Sleeve or wrap", "Hang tag", "Inserts, stickers & tissue", "Not sure yet"] },
+        { id: "skus", type: "single", layout: "chips", full: true, required: true, label: "How many products or variants?", sub: "Flavors, scents, sizes, or colorways that each need their own design.",
+          options: ["1", "2–3", "4–6", "7–10", "10+"] },
+        { id: "skuDetails", type: "textarea", full: true, label: "List your variants", placeholder: "e.g. Lavender 4oz, Lavender 8oz, Citrus 4oz…" },
+        { id: "dieline", type: "single", layout: "list", full: true, required: true, label: "Manufacturer & dielines",
+          options: ["I have dielines from my manufacturer", "I have a manufacturer, but no dielines yet", "I need help finding a manufacturer", "I’m not sure"] },
+        { id: "manufacturer", type: "text", label: "Manufacturer or printer", placeholder: "If known" },
+        { id: "quantity", type: "single", layout: "chips", label: "Estimated first print run", options: ["Under 500", "500–2,500", "2,500–10,000", "10,000+", "Not sure"] },
+        { id: "specs", type: "textarea", full: true, label: "Known dimensions, materials, or specs", placeholder: "Sizes, stock, container type…" },
+        { id: "copyReady", type: "single", layout: "list", full: true, required: true, label: "Is your packaging copy ready?", sub: "Product name, claims, descriptions, directions, and legal text.",
+          options: ["Yes, all final copy is ready", "Partially — some copy is ready", "No, I need help with copy"] },
+        { id: "requirements", type: "multi", layout: "chips", full: true, label: "Required information on pack",
+          options: ["Ingredients", "Nutrition / supplement facts", "Barcode / UPC", "Net weight or volume", "Directions & warnings", "Certifications", "Recycling info", "Not sure"] }
+      ]
+    },
+    {
+      id: "look", eyebrow: "04 — Look & Feel", title: "Set the Mood",
+      intro: "Share the feeling you want your packaging to carry — and anything we should steer clear of.",
+      fields: [
+        { id: "vibe", type: "multi", layout: "chips", full: true, required: true, label: "Which words fit your vision?",
+          options: ["Minimal", "Luxe", "Playful", "Earthy & natural", "Bold & graphic", "Vintage", "Clean & clinical", "Editorial", "Romantic", "Modern"] },
+        { id: "finishes", type: "multi", layout: "chips", full: true, label: "Finishes you’re drawn to",
+          options: ["Matte", "Gloss", "Soft-touch", "Foil", "Embossing", "Spot UV", "Kraft / natural", "Open to recommendations"] },
+        { id: "moodboard", type: "text", full: true, required: true, orFiles: true, label: "Moodboard link", sub: "Pinterest, Canva, or any shared link — or upload screenshots below instead.", placeholder: "https://pinterest.com/…" },
+        { id: "inspiration", type: "textarea", label: "Brands or packaging you love", placeholder: "Names or links…" },
+        { id: "avoid", type: "textarea", label: "Anything to avoid?", placeholder: "Colors, styles, competitors…" },
+        { id: "files", type: "file", full: true, label: "Upload your assets", sub: "Logos, brand guidelines, dielines, current packaging, product photos, or inspiration." }
+      ]
+    },
+    {
+      id: "timeline", eyebrow: "05 — Timeline & Budget", title: "Timing Is Everything",
+      intro: "Packaging design typically takes 2–6 weeks, depending on the number of pieces, revisions, and printer requirements.",
+      fields: [
+        { id: "startDate", type: "date", label: "Ideal start date", required: true },
+        { id: "deadline", type: "date", label: "Print-ready files needed by", required: true },
+        { id: "launchDate", type: "date", label: "Product launch date" },
+        { id: "budget", type: "single", layout: "chips", full: true, label: "Design budget", sub: "Design fees only — printing and production are separate.",
+          options: ["$1,000–$3,000", "$3,000–$6,000", "$6,000–$10,000", "Not sure yet"] },
+        { id: "notes", type: "textarea", full: true, label: "Anything else we should know?", placeholder: "Retail deadlines, concerns, ideas…" }
+      ]
+    }
+  ]
+};
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_ATTACH = 4 * 1024 * 1024;
+
+class Component extends DCLogic {
+  state = { screen: 0, values: {}, files: [], errors: {}, status: "idle" };
+
+  steps() {
+    const showBudget = this.props.showBudget ?? true;
+    return PK_CONFIG.steps.map((s) => ({ ...s, fields: s.fields.filter((f) => showBudget || f.id !== "budget") }));
+  }
+
+  go(n) {
+    this.setState({ screen: n, errors: {} });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  validate(step) {
+    const v = this.state.values, errors = {};
+    step.fields.forEach((f) => {
+      const val = v[f.id];
+      if (f.type === "email" && val && !EMAIL_RE.test(String(val).trim())) errors[f.id] = "Please enter a valid email.";
+      if (!f.required || f.type === "file") return;
+      if (f.orFiles && this.state.files.length) return;
+      const empty = f.type === "multi" ? !(val && val.length) : !(val && String(val).trim());
+      if (empty) errors[f.id] = f.orFiles ? "Add a moodboard link or upload screenshots below." : f.type === "single" || f.type === "multi" ? "Please choose an option." : "This field is required.";
+    });
+    return errors;
+  }
+
+  goNext = () => {
+    const steps = this.steps(), s = this.state.screen;
+    if (s >= 1 && s <= steps.length) {
+      const errors = this.validate(steps[s - 1]);
+      if (Object.keys(errors).length) return this.setState({ errors });
+    }
+    this.go(s + 1);
+  };
+  goBack = () => this.go(Math.max(0, this.state.screen - 1));
+
+  setVal(id, val) {
+    this.setState((s) => ({ values: { ...s.values, [id]: val }, errors: { ...s.errors, [id]: undefined } }));
+  }
+
+  toggleMulti(id, opt) {
+    const cur = this.state.values[id] || [];
+    this.setVal(id, cur.includes(opt) ? cur.filter((o) => o !== opt) : [...cur, opt]);
+  }
+
+  readB64(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(String(r.result || "").split(",").pop());
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+  }
+
+  handleFiles = async (e) => {
+    const list = Array.from(e.target.files || []);
+    e.target.value = "";
+    let total = this.state.files.reduce((n, f) => n + (f.base64 ? f.size : 0), 0);
+    const out = [];
+    for (const file of list) {
+      let base64 = null;
+      if (file.size <= MAX_ATTACH && total + file.size <= MAX_ATTACH) {
+        try { base64 = await this.readB64(file); total += file.size; } catch (_) {}
+      }
+      out.push({ name: file.name, size: file.size, base64 });
+    }
+    this.setState((s) => ({ files: [...s.files, ...out] }));
+  };
+
+  fmtDate(v) {
+    if (!v) return "";
+    const d = new Date(v + "T00:00:00");
+    return isNaN(d) ? v : d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  }
+
+  display(f) {
+    const v = this.state.values[f.id];
+    if (f.type === "file") return this.state.files.map((x) => x.name).join("\n");
+    if (f.type === "multi") return (v || []).join(", ");
+    if (f.type === "date") return this.fmtDate(v);
+    return v ? String(v).trim() : "";
+  }
+
+  sections() {
+    return this.steps().map((s, i) => ({
+      title: s.title,
+      edit: () => this.go(i + 1),
+      rows: s.fields.map((f) => ({ label: f.label, value: this.display(f) || "—" }))
+    }));
+  }
+
+  submit = async () => {
+    if (this.state.status === "loading") return;
+    this.setState({ status: "loading" });
+    const v = this.state.values;
+    const payload = {
+      contactName: v.contactName || "", contactEmail: v.contactEmail || "", businessName: v.businessName || "",
+      sections: this.sections().map((s) => ({ title: s.title, rows: s.rows.map((r) => ({ label: r.label, value: r.value })) })),
+      files: this.state.files.map((f) => ({ name: f.name, size: f.size, base64: f.base64 }))
+    };
+    try {
+      const res = await fetch(this.props.endpoint || PK_CONFIG.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      if (!res.ok) throw new Error(res.status);
+      this.setState({ status: "success" });
+      this.go(this.steps().length + 2);
+    } catch (_) {
+      this.setState({ status: "error" });
+    }
+  };
+
+  renderVals() {
+    const st = this.state, steps = this.steps(), n = steps.length, screen = st.screen;
+    const isForm = screen >= 1 && screen <= n;
+    const current = isForm ? steps[screen - 1] : { eyebrow: "", title: "", intro: "" };
+    const ink = "#2b2b2c", paper = "#fcfbf9", line = "rgba(252,251,249,0.22)";
+
+    const fields = isForm ? current.fields.map((f) => {
+      const val = st.values[f.id];
+      const err = st.errors[f.id];
+      const layout = f.layout || "chips";
+      const options = (f.options || []).map((opt) => {
+        const selected = f.type === "multi" ? (val || []).includes(opt) : val === opt;
+        return {
+          label: opt, selected,
+          display: (f.type === "multi" && selected ? "✓  " : "") + opt,
+          onClick: () => (f.type === "multi" ? this.toggleMulti(f.id, opt) : this.setVal(f.id, opt)),
+          bg: selected ? paper : "transparent", fg: selected ? ink : paper,
+          border: selected ? paper : line,
+          rowBg: selected ? "rgba(252,251,249,0.07)" : "transparent",
+          dotOpacity: selected ? 1 : 0, dotScale: selected ? 1 : 0.2
+        };
+      });
+      return {
+        ...f,
+        labelText: f.label + (f.required ? " *" : ""),
+        hasSub: !!f.sub,
+        gridColumn: f.full || f.type === "textarea" && f.full ? "1 / -1" : "auto",
+        isInput: ["text", "email", "date"].includes(f.type),
+        inputType: f.type,
+        isTextarea: f.type === "textarea",
+        isChips: (f.type === "single" || f.type === "multi") && layout === "chips",
+        isList: (f.type === "single" || f.type === "multi") && layout === "list",
+        isFile: f.type === "file",
+        value: val || "",
+        placeholder: f.placeholder || "",
+        onChange: (e) => this.setVal(f.id, e.target.value),
+        border: err ? "#f08a63" : line,
+        options,
+        hasError: !!err, errorText: err || ""
+      };
+    }) : [];
+
+    const files = st.files.map((f, i) => ({ name: f.name + (f.base64 ? "" : " — name only, too large to attach"), remove: () => this.setState((s) => ({ files: s.files.filter((_, j) => j !== i) })) }));
+
+    let headerLabel = "Packaging Intake";
+    if (isForm) headerLabel = "Step " + screen + " of " + n;
+    else if (screen === n + 1) headerLabel = "Review";
+    else if (screen === n + 2) headerLabel = "Submitted";
+
+    return {
+      stepKey: "s" + screen,
+      headerLabel,
+      progressPercent: Math.min(100, (screen / (n + 1)) * 100),
+      maxWidth: screen === 0 ? 1200 : 860,
+      isWelcome: screen === 0,
+      isForm, isReview: screen === n + 1, isThanks: screen === n + 2,
+      current, fields,
+      hasErrors: Object.values(st.errors).some(Boolean),
+      nextLabel: screen === n ? "Review My Brief" : "Continue",
+      goNext: this.goNext, goBack: this.goBack,
+      handleFiles: this.handleFiles, files, hasFiles: files.length > 0,
+      reviewSections: screen === n + 1 ? this.sections() : [],
+      printPage: () => typeof window !== "undefined" && window.print(),
+      submit: this.submit,
+      isSubmitting: st.status === "loading",
+      submitError: st.status === "error",
+      submitOpacity: st.status === "loading" ? 0.5 : 1,
+      submitLabel: st.status === "loading" ? "Sending…" : st.status === "error" ? "Try Again" : "Send My Brief"
+    };
+  }
+}
+</script>
+</body>
+</html>
